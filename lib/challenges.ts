@@ -972,7 +972,7 @@ const INTERMEDIATE: Challenge[] = [
   {
     id: "mid-cpp-delete-cerr",
     language: "cpp" as Language,
-    title: "デバッグ出力を削除 (cerr)",
+    title: "デバッグ出力を削除",
     description: "デバッグ用の cerr 出力行をすべて削除せよ",
     category: "search",
     difficulty: "intermediate",
