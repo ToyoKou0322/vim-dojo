@@ -4,6 +4,29 @@ export interface ChallengeRecord {
 }
 
 const STORAGE_KEY = "vimforge_records";
+const PROGRESS_KEY = "vimforge_progress";
+
+export interface GameProgress {
+  completedIds: string[];
+  score: number;
+  selectedDifficulty: string;
+  selectedCategory: string;
+}
+
+export function loadProgress(): GameProgress | null {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    return raw ? (JSON.parse(raw) as GameProgress) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveProgress(progress: GameProgress): void {
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(progress));
+  } catch {}
+}
 
 function load(): Record<string, ChallengeRecord> {
   try {

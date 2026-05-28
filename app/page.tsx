@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import { CHALLENGES, Challenge, Difficulty, Language } from "@/lib/challenges";
 import { initialGameState, GameState, calculateScore } from "@/lib/gameState";
-import { saveRecord, ChallengeRecord } from "@/lib/records";
+import { saveRecord, ChallengeRecord, loadProgress, saveProgress } from "@/lib/records";
 import ChallengePanel from "@/components/ChallengePanel";
 import ModeIndicator from "@/components/ModeIndicator";
 import Timer from "@/components/Timer";
@@ -370,6 +370,29 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
       return;
     }
   }, [freeLanguage, freeContent, freeInput]);
+
+  // マウント時に進行状況を復元
+  useEffect(() => {
+    const progress = loadProgress();
+    if (!progress) return;
+    setGame((g) => ({
+      ...g,
+      completedIds: new Set(progress.completedIds),
+      score: progress.score,
+      selectedDifficulty: (progress.selectedDifficulty as GameState["selectedDifficulty"]) ?? "all",
+      selectedCategory: (progress.selectedCategory as GameState["selectedCategory"]) ?? "all",
+    }));
+  }, []);
+
+  // 進行状況を localStorage に保存
+  useEffect(() => {
+    saveProgress({
+      completedIds: [...game.completedIds],
+      score: game.score,
+      selectedDifficulty: game.selectedDifficulty,
+      selectedCategory: game.selectedCategory,
+    });
+  }, [game.completedIds, game.score, game.selectedDifficulty, game.selectedCategory]);
 
   useEffect(() => {
     if (game.status !== "showing-result") return;
