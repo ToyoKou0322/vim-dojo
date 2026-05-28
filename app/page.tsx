@@ -398,7 +398,7 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
               onClick={() => setGame((g) => ({ ...g, status: "idle", currentChallenge: null, currentCourse: null, courseIndex: 0 }))}
               className="text-2xl font-bold font-mono text-green-400 hover:text-green-300 transition-colors cursor-pointer"
             >
-              VimDojo
+              VimForge
             </button>
             <span className="text-gray-500 text-sm">Vim 練習ゲーム</span>
           </div>
@@ -440,7 +440,7 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
         {game.status === "idle" && (
           <div className="text-center py-16 space-y-6">
             <div className="text-6xl">⚡</div>
-            <h1 className="text-4xl font-bold">VimDojo へようこそ！</h1>
+            <h1 className="text-4xl font-bold">VimForge へようこそ！</h1>
             <p className="text-gray-400 max-w-md mx-auto">
               Vim のコマンドを実際に入力しながら練習できるゲームです。
               難易度とカテゴリを選んでスタートしましょう。

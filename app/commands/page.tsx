@@ -403,7 +403,7 @@ export default function CommandsPage() {
         <div className="max-w-6xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link href="/" className="text-2xl font-bold font-mono text-green-400 hover:text-green-300 transition-colors">
-              VimDojo
+              VimForge
             </Link>
             <span className="text-gray-600">/</span>
             <span className="text-white font-semibold">コマンド一覧</span>

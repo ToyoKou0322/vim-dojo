@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "VimDojo - Vim 練習ゲーム",
+  title: "VimForge - Vim 練習ゲーム",
   description: "Vim のコマンドをゲーム形式で練習できるサイト",
 };
 

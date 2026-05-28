@@ -3,7 +3,7 @@ export interface ChallengeRecord {
   bestKeystrokes: number;
 }
 
-const STORAGE_KEY = "vimdojo_records";
+const STORAGE_KEY = "vimforge_records";
 
 function load(): Record<string, ChallengeRecord> {
   try {
