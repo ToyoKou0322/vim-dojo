@@ -20,8 +20,11 @@ const CSS_SAMPLE_HTML = `
 
 function PanelHeader({ label }: { label: string }) {
   return (
-    <div className="bg-gray-800 px-3 py-1.5 text-xs text-gray-400 font-semibold uppercase tracking-wide border-b border-gray-700">
-      {label}
+    <div
+      className="px-3 py-1.5 text-xs font-mono font-semibold uppercase tracking-widest border-b border-[var(--border)]"
+      style={{ color: "var(--dim)", background: "var(--surface2)" }}
+    >
+      // {label}
     </div>
   );
 }
@@ -36,7 +39,7 @@ function parseLines(s: string): string[] {
 export default function FreeOutput({ data }: { data: FreeOutputData }) {
   if (data.type === "unsupported") {
     return (
-      <div className="bg-gray-900 rounded-xl border border-gray-700 p-4 text-gray-400 text-sm">
+      <div className="cyber-card rounded p-4 font-mono text-sm" style={{ color: "var(--dim)" }}>
         {data.message}
       </div>
     );
@@ -44,7 +47,7 @@ export default function FreeOutput({ data }: { data: FreeOutputData }) {
 
   if (data.type === "html") {
     return (
-      <div className="rounded-xl border border-gray-700 overflow-hidden">
+      <div className="cyber-card rounded overflow-hidden">
         <PanelHeader label="プレビュー" />
         <iframe
           srcDoc={data.content}
@@ -58,7 +61,7 @@ export default function FreeOutput({ data }: { data: FreeOutputData }) {
 
   if (data.type === "css") {
     return (
-      <div className="rounded-xl border border-gray-700 overflow-hidden">
+      <div className="cyber-card rounded overflow-hidden">
         <PanelHeader label="CSS プレビュー" />
         <iframe
           srcDoc={`<style>${data.content}</style>${CSS_SAMPLE_HTML}`}
@@ -76,23 +79,23 @@ export default function FreeOutput({ data }: { data: FreeOutputData }) {
     const hasOutput = stdoutLines.length > 0 || stderrLines.length > 0;
 
     return (
-      <div className="rounded-xl border border-gray-700 overflow-hidden">
+      <div className="cyber-card rounded overflow-hidden">
         <PanelHeader label="標準出力" />
-        <div className="bg-gray-950 p-4 font-mono text-sm min-h-[60px] max-h-64 overflow-y-auto">
+        <div className="p-4 font-mono text-sm min-h-[60px] max-h-64 overflow-y-auto" style={{ background: "var(--surface)" }}>
           {!hasOutput ? (
-            <p className="text-gray-600">出力なし</p>
+            <p className="font-mono" style={{ color: "var(--dim2)" }}>出力なし</p>
           ) : (
             <>
               {stdoutLines.map((line, i) => (
-                <p key={`out-${i}`} className="text-green-300">{line || " "}</p>
+                <p key={`out-${i}`} className="neon-cyan">{line || " "}</p>
               ))}
               {stderrLines.map((line, i) => (
-                <p key={`err-${i}`} className="text-red-400">{line || " "}</p>
+                <p key={`err-${i}`} className="text-[#ff3860]">{line || " "}</p>
               ))}
             </>
           )}
           {data.exitCode !== 0 && (
-            <p className="text-yellow-600 mt-2 text-xs border-t border-gray-800 pt-2">
+            <p className="text-[#ffdd00] mt-2 text-xs border-t border-[var(--border)] pt-2 font-mono">
               終了コード: {data.exitCode}
             </p>
           )}
@@ -102,16 +105,16 @@ export default function FreeOutput({ data }: { data: FreeOutputData }) {
   }
 
   return (
-    <div className="rounded-xl border border-gray-700 overflow-hidden">
+    <div className="cyber-card rounded overflow-hidden">
       <PanelHeader label="出力" />
-      <div className="bg-gray-950 p-4 font-mono text-sm min-h-[60px] max-h-64 overflow-y-auto">
+      <div className="p-4 font-mono text-sm min-h-[60px] max-h-64 overflow-y-auto" style={{ background: "var(--surface)" }}>
         {data.lines.length === 0 ? (
-          <p className="text-gray-600">出力なし</p>
+          <p style={{ color: "var(--dim2)" }}>出力なし</p>
         ) : (
           data.lines.map((line, i) => (
             <p
               key={i}
-              className={line.startsWith("[error]") ? "text-red-400" : "text-green-300"}
+              className={line.startsWith("[error]") ? "text-[#ff3860]" : "neon-cyan"}
             >
               {line}
             </p>

@@ -413,38 +413,39 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
   const totalCount = CHALLENGES.length;
 
   return (
-    <main className="min-h-screen bg-gray-950 text-white">
-      <header className="border-b border-gray-800 px-6 py-4">
+    <main className="min-h-screen">
+      <header className="border-b border-[var(--border)] px-6 py-4" style={{ boxShadow: "0 1px 20px rgba(0,229,255,0.06)" }}>
         <div className="max-w-5xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <button
               onClick={() => setGame((g) => ({ ...g, status: "idle", currentChallenge: null, currentCourse: null, courseIndex: 0 }))}
-              className="text-2xl font-bold font-mono text-green-400 hover:text-green-300 transition-colors cursor-pointer"
+              className="text-2xl font-bold font-mono neon-cyan hover:opacity-80 transition-opacity cursor-pointer"
             >
               VimForge
             </button>
-            <span className="text-gray-500 text-sm">Vim 練習ゲーム</span>
+            <span className="text-sm font-mono hidden sm:block" style={{ color: "var(--dim)" }}>// vim練習ゲーム</span>
           </div>
-          <div className="flex items-center gap-4 text-sm">
+          <div className="flex items-center gap-4 text-sm font-mono">
             <Link
               href="/commands"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-gray-400 hover:text-white transition-colors hidden sm:block"
+              className="hidden sm:block transition-colors hover:text-[var(--cyan)]"
+              style={{ color: "var(--dim)" }}
             >
               コマンド一覧
             </Link>
-            <span className="text-gray-400">
+            <span style={{ color: "var(--dim)" }}>
               クリア: <span className="text-white font-bold">{completedCount}/{totalCount}</span>
             </span>
-            <span className="text-gray-400">
-              スコア: <span className="text-yellow-400 font-bold text-lg">{game.score}</span>
+            <span style={{ color: "var(--dim)" }}>
+              スコア: <span className="neon-pink font-bold text-lg">{game.score}</span>
             </span>
           </div>
         </div>
       </header>
 
-      <div className="max-w-5xl mx-auto px-6 py-8 space-y-3">
+      <div className="max-w-5xl mx-auto px-6 py-8 space-y-3 relative z-10">
         {game.status !== "free" && game.status !== "course-select" && !game.currentCourse && (
           <>
             <DifficultySelector
@@ -462,42 +463,43 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
 
         {game.status === "idle" && (
           <div className="text-center py-16 space-y-6">
-            <div className="text-6xl">⚡</div>
-            <h1 className="text-4xl font-bold">VimForge へようこそ！</h1>
-            <p className="text-gray-400 max-w-md mx-auto">
-              Vim のコマンドを実際に入力しながら練習できるゲームです。
-              難易度とカテゴリを選んでスタートしましょう。
+            <div className="font-mono text-sm select-none" style={{ color: "var(--dim2)" }}>
+              ◈ ◈ ◈
+            </div>
+            <h1 className="text-5xl font-bold font-mono neon-cyan tracking-tight">VimForge</h1>
+            <p className="font-mono text-sm max-w-md mx-auto" style={{ color: "var(--dim)" }}>
+              &gt; Vim コマンドをゲーム形式で練習できるサイト
             </p>
             <div className="flex items-center justify-center gap-4 flex-wrap">
               <button
                 onClick={handleStart}
-                className="px-8 py-3 bg-green-600 hover:bg-green-500 text-white rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-100"
+                className="btn-neon-cyan px-8 py-3 rounded font-bold font-mono text-lg transition-all"
               >
-                スタート ▶
+                [ スタート ]
               </button>
               <button
                 onClick={() => setGame((g) => ({ ...g, status: "course-select" }))}
-                className="px-8 py-3 bg-blue-700 hover:bg-blue-600 text-white rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-100"
+                className="btn-neon-pink px-8 py-3 rounded font-bold font-mono text-lg transition-all"
               >
-                コースモード 📚
+                [ コースモード ]
               </button>
               <button
                 onClick={handleFree}
-                className="px-8 py-3 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-bold text-lg transition-all hover:scale-105 active:scale-100"
+                className="btn-ghost px-8 py-3 rounded font-bold font-mono text-lg transition-all"
               >
-                フリーモード
+                [ フリーモード ]
               </button>
             </div>
             <div className="grid grid-cols-3 gap-4 max-w-xl mx-auto mt-8">
               {[
-                { icon: "🌱", label: "初級", desc: "基本コマンドの練習" },
-                { icon: "⚡", label: "中級", desc: "実際のコードを編集" },
-                { icon: "🔥", label: "上級", desc: "複数ステップの本格編集" },
+                { icon: "🌱", label: "BEGINNER", desc: "基本コマンドの練習" },
+                { icon: "◈", label: "INTERMEDIATE", desc: "実際のコードを編集" },
+                { icon: "◆", label: "ADVANCED", desc: "複数ステップの本格編集" },
               ].map((item) => (
-                <div key={item.label} className="bg-gray-900 rounded-lg p-4 border border-gray-800">
+                <div key={item.label} className="cyber-card rounded p-4">
                   <div className="text-2xl mb-2">{item.icon}</div>
-                  <div className="font-semibold text-sm">{item.label}</div>
-                  <div className="text-gray-500 text-xs mt-1">{item.desc}</div>
+                  <div className="font-semibold text-xs font-mono text-white tracking-wider">{item.label}</div>
+                  <div className="text-xs mt-1 font-mono" style={{ color: "var(--dim)" }}>{item.desc}</div>
                 </div>
               ))}
             </div>
@@ -516,15 +518,13 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
           <div className="space-y-4 pt-1">
             <div className="flex items-center justify-between flex-wrap gap-3">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-gray-400 text-sm font-semibold">言語:</span>
+                <span className="text-sm font-semibold font-mono" style={{ color: "var(--dim)" }}>言語:</span>
                 {FREE_LANG_ORDER.map((lang) => (
                   <button
                     key={lang}
                     onClick={() => handleChangeFreeLanguage(lang)}
-                    className={`px-3 py-1 rounded-lg text-sm font-semibold transition-all ${
-                      freeLanguage === lang
-                        ? "bg-green-600 text-white"
-                        : "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white"
+                    className={`px-3 py-1 rounded text-sm font-semibold font-mono transition-all ${
+                      freeLanguage === lang ? "btn-neon-cyan" : "btn-ghost"
                     }`}
                   >
                     {FREE_STARTERS[lang].label}
@@ -533,7 +533,7 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
               </div>
               <button
                 onClick={() => setGame((g) => ({ ...g, status: "idle" }))}
-                className="px-4 py-1.5 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-lg text-sm font-semibold transition-colors"
+                className="btn-ghost px-4 py-1.5 rounded text-sm font-semibold font-mono transition-colors"
               >
                 ← メニューに戻る
               </button>
@@ -546,7 +546,7 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
                   <button
                     onClick={handleRun}
                     disabled={isRunning}
-                    className="px-4 py-1.5 bg-green-700 hover:bg-green-600 disabled:bg-gray-700 disabled:text-gray-500 text-white rounded-lg text-sm font-bold transition-colors font-mono"
+                    className="btn-neon-cyan px-4 py-1.5 rounded text-sm font-bold font-mono transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     {isRunning ? "実行中..." : "▶ 実行"}
                   </button>
@@ -563,21 +563,22 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
                 language={FREE_STARTERS[freeLanguage].language}
               />
               {(freeLanguage === "python" || freeLanguage === "cpp") && (
-                <div className="rounded-xl border border-gray-700 overflow-hidden">
-                  <div className="bg-gray-800 px-3 py-1.5 text-xs text-gray-400 font-semibold uppercase tracking-wide border-b border-gray-700">
-                    標準入力
+                <div className="cyber-card rounded overflow-hidden">
+                  <div className="px-3 py-1.5 text-xs font-mono font-semibold uppercase tracking-widest border-b border-[var(--border)]" style={{ color: "var(--dim)" }}>
+                    // 標準入力
                   </div>
                   <textarea
                     value={freeInput}
                     onChange={(e) => setFreeInput(e.target.value)}
                     placeholder="テストケースの入力をここに貼り付け..."
-                    className="w-full bg-gray-950 p-4 font-mono text-sm text-gray-200 placeholder-gray-700 resize-none h-24 focus:outline-none"
+                    className="w-full p-4 font-mono text-sm resize-none h-24 focus:outline-none"
+                    style={{ background: "var(--surface)", color: "var(--text)" }}
                     spellCheck={false}
                   />
                 </div>
               )}
               {freeOutput && <FreeOutput data={freeOutput} />}
-              <p className="text-gray-600 text-xs text-center">
+              <p className="text-xs text-center font-mono" style={{ color: "var(--dim2)" }}>
                 自由に Vim コマンドを練習しよう · ESC で Normal モードへ
               </p>
               <CommandReference />
@@ -594,11 +595,11 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
                   score={game.score}
                   streak={game.streak}
                 />
-                <div className="bg-gray-900 rounded-xl border border-gray-700 p-6">
-                  <p className="text-xs text-gray-400 mb-3 font-semibold uppercase tracking-wide">
-                    目標テキスト
+                <div className="cyber-card rounded p-5">
+                  <p className="text-xs font-mono font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--dim)" }}>
+                    // 目標テキスト
                   </p>
-                  <pre className="text-green-300 font-mono text-sm whitespace-pre-wrap break-all leading-relaxed">
+                  <pre className="neon-cyan font-mono text-sm whitespace-pre-wrap break-all leading-relaxed">
                     {game.currentChallenge.targetContent}
                   </pre>
                 </div>
@@ -628,7 +629,7 @@ window.parent.postMessage({id:${encodedId},lines,hasError},'*');
                     />
                   </div>
 
-                  <p className="text-gray-600 text-xs text-center">
+                  <p className="text-xs text-center font-mono" style={{ color: "var(--dim2)" }}>
                     エディタをクリックして入力開始 · ESC で Normal モードへ
                   </p>
                 </div>

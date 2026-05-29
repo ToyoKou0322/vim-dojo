@@ -10,9 +10,7 @@ const SECTIONS = [
   {
     category: "movement" as Category,
     label: "移動",
-    color: "text-blue-400",
-    borderColor: "border-blue-700",
-    bgColor: "bg-blue-950/40",
+    activeClass: "border-[#00e5ff] text-[#00e5ff] bg-[rgba(0,229,255,0.05)]",
     commands: [
       { keys: "h / j / k / l", desc: "左/下/上/右" },
       { keys: "w / b", desc: "次/前の単語先頭" },
@@ -27,9 +25,7 @@ const SECTIONS = [
   {
     category: "mode" as Category,
     label: "挿入",
-    color: "text-purple-400",
-    borderColor: "border-purple-700",
-    bgColor: "bg-purple-950/40",
+    activeClass: "border-[#9d4edd] text-[#9d4edd] bg-[rgba(157,78,221,0.05)]",
     commands: [
       { keys: "i / a", desc: "カーソル前/後に挿入" },
       { keys: "I / A", desc: "行頭/末に挿入" },
@@ -42,9 +38,7 @@ const SECTIONS = [
   {
     category: "editing" as Category,
     label: "編集",
-    color: "text-green-400",
-    borderColor: "border-green-700",
-    bgColor: "bg-green-950/40",
+    activeClass: "border-[#39ff14] text-[#39ff14] bg-[rgba(57,255,20,0.05)]",
     commands: [
       { keys: "x", desc: "1 文字削除" },
       { keys: "r{c}", desc: "1 文字置換" },
@@ -62,9 +56,7 @@ const SECTIONS = [
   {
     category: "search" as Category,
     label: "検索・置換",
-    color: "text-orange-400",
-    borderColor: "border-orange-700",
-    bgColor: "bg-orange-950/40",
+    activeClass: "border-[#ff00aa] text-[#ff00aa] bg-[rgba(255,0,170,0.05)]",
     commands: [
       { keys: "/{pat}", desc: "前方検索" },
       { keys: "?{pat}", desc: "後方検索" },
@@ -79,9 +71,9 @@ const SECTIONS = [
 
 export default function CommandReference({ activeCategory }: CommandReferenceProps) {
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-700 p-4">
-      <p className="text-xs text-gray-400 mb-3 font-semibold uppercase tracking-wide">
-        コマンドリファレンス
+    <div className="cyber-card rounded p-4">
+      <p className="text-xs font-mono font-semibold uppercase tracking-widest mb-3" style={{ color: "var(--dim)" }}>
+        // コマンドリファレンス
       </p>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {SECTIONS.map((section) => {
@@ -89,26 +81,25 @@ export default function CommandReference({ activeCategory }: CommandReferencePro
           return (
             <div
               key={section.category}
-              className={`rounded-lg border p-3 transition-colors ${
-                isActive
-                  ? `${section.bgColor} ${section.borderColor}`
-                  : "border-gray-700 bg-gray-800/50"
+              className={`rounded border p-3 transition-colors ${
+                isActive ? section.activeClass : "border-[var(--border)] bg-[var(--surface2)]"
               }`}
             >
-              <p className={`text-xs font-bold mb-2 ${isActive ? section.color : "text-gray-400"}`}>
+              <p className={`text-xs font-mono font-bold mb-2 ${isActive ? "" : ""}`}
+                 style={isActive ? {} : { color: "var(--dim)" }}>
                 {section.label}
               </p>
               <ul className="space-y-1">
                 {section.commands.map(({ keys, desc }) => (
                   <li key={keys} className="flex items-baseline gap-1.5">
                     <code
-                      className={`text-xs font-mono shrink-0 ${
-                        isActive ? section.color : "text-gray-300"
-                      }`}
+                      className={`text-xs font-mono shrink-0 ${isActive ? "" : "text-[var(--text)]"}`}
                     >
                       {keys}
                     </code>
-                    <span className="text-gray-500 text-xs leading-tight">{desc}</span>
+                    <span className="text-xs leading-tight font-mono" style={{ color: "var(--dim)" }}>
+                      {desc}
+                    </span>
                   </li>
                 ))}
               </ul>

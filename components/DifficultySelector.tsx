@@ -10,18 +10,11 @@ interface DifficultySelectorProps {
   completedIds: Set<string>;
 }
 
-const ACTIVE: Record<string, string> = {
-  all: "bg-white text-gray-900",
-  beginner: "bg-green-600 text-white",
-  intermediate: "bg-yellow-500 text-gray-900",
-  advanced: "bg-red-600 text-white",
-};
-
-const IDLE: Record<string, string> = {
-  all: "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white",
-  beginner: "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white",
-  intermediate: "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white",
-  advanced: "bg-gray-800 text-gray-400 hover:bg-gray-700 hover:text-white",
+const ACTIVE_STYLE: Record<string, string> = {
+  all:          "btn-neon-cyan",
+  beginner:     "border border-[#39ff14] text-[#39ff14] shadow-[0_0_8px_rgba(57,255,20,0.3)] bg-[rgba(57,255,20,0.05)]",
+  intermediate: "border border-[#ffdd00] text-[#ffdd00] shadow-[0_0_8px_rgba(255,221,0,0.3)] bg-[rgba(255,221,0,0.05)]",
+  advanced:     "btn-neon-pink",
 };
 
 export default function DifficultySelector({ selected, onChange, completedIds }: DifficultySelectorProps) {
@@ -30,7 +23,7 @@ export default function DifficultySelector({ selected, onChange, completedIds }:
   return (
     <div className="flex flex-wrap gap-2">
       {filters.map((d) => {
-        const info = d === "all" ? { label: "すべて", icon: "📚" } : DIFFICULTIES[d];
+        const info = d === "all" ? { label: "すべて", icon: "◈" } : DIFFICULTIES[d];
         const total = d === "all" ? CHALLENGES.length : CHALLENGES.filter((c) => c.difficulty === d).length;
         const completed = d === "all"
           ? completedIds.size
@@ -41,15 +34,13 @@ export default function DifficultySelector({ selected, onChange, completedIds }:
           <button
             key={d}
             onClick={() => onChange(d)}
-            className={`flex items-center gap-1.5 px-4 py-1.5 rounded-lg text-sm font-semibold transition-all ${
-              isActive ? ACTIVE[d] + " shadow-lg scale-105" : IDLE[d]
+            className={`flex items-center gap-1.5 px-4 py-1.5 rounded text-sm font-semibold font-mono transition-all ${
+              isActive ? ACTIVE_STYLE[d] : "btn-ghost"
             }`}
           >
             <span>{info.icon}</span>
             <span>{info.label}</span>
-            <span className={`text-xs ml-1 ${isActive ? "opacity-70" : "text-gray-500"}`}>
-              {completed}/{total}
-            </span>
+            <span className="text-xs ml-1 opacity-60">{completed}/{total}</span>
           </button>
         );
       })}

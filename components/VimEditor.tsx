@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback } from "react";
-import { EditorState } from "@codemirror/state";
+import { EditorState, Prec } from "@codemirror/state";
 import { EditorView, keymap, lineNumbers, drawSelection } from "@codemirror/view";
-import { vim, Vim } from "@replit/codemirror-vim";
+import { vim, Vim, getCM } from "@replit/codemirror-vim";
 import { oneDark } from "@codemirror/theme-one-dark";
 import { defaultKeymap, history, historyKeymap } from "@codemirror/commands";
 import { javascript } from "@codemirror/lang-javascript";
@@ -16,6 +16,16 @@ import { Language } from "@/lib/challenges";
 // Module-level state — safe to keep here (no DOM access)
 let _activeView: EditorView | null = null;
 let _yankRegistered = false;
+
+function toHalfWidth(key: string): string {
+  if (key.length !== 1) return key;
+  const code = key.charCodeAt(0);
+  // 全角英数記号 U+FF01–U+FF5E → 半角 U+0021–U+007E
+  if (code >= 0xFF01 && code <= 0xFF5E) return String.fromCharCode(code - 0xFEE0);
+  // 全角スペース U+3000 → 半角スペース
+  if (code === 0x3000) return ' ';
+  return key;
+}
 
 function detectIndentUnit(content: string): string {
   for (const line of content.split("\n")) {
@@ -76,9 +86,33 @@ export default function VimEditor({
     if (!editorRef.current) return;
 
     const langExt = getLanguageExtension(language);
+    // 全角→半角変換ハンドラ
+    // ケース A (IME 経由: useNextTextInput=true):
+    //   langmap が vimKeyFromEvent 内で ｊ→j へ変換する。
+    //   ここでは false を返し vim 自身の inputHandler に任せる。
+    // ケース B (keydown 経由: useNextTextInput=false):
+    //   vim はすでに keydown でカーソルを動かしている。
+    //   全角テキストがドキュメントに挿入されないよう true を返してキャンセル。
+    const fullWidthInputHandler = Prec.highest(
+      EditorView.inputHandler.of((view, _from, _to, text) => {
+        if (text.length !== 1) return false;
+        if (toHalfWidth(text) === text) return false; // 半角ならスキップ
+        const cm = getCM(view);
+        if (!cm) return false;
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const vimState = (cm as any).state?.vim;
+        if (!vimState || vimState.insertMode) return false; // INSERT モードは挿入を許可
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const vimPlugin = (cm as any).state?.vimPlugin;
+        if (vimPlugin?.useNextTextInput) return false; // ケース A: vim に任せる
+        return true; // ケース B: 挿入だけキャンセル
+      })
+    );
+
     const state = EditorState.create({
       doc: initialContent,
       extensions: [
+        fullWidthInputHandler,
         vim({
           status: true,
         }),
@@ -166,6 +200,18 @@ export default function VimEditor({
 
     if (!_yankRegistered) {
       _yankRegistered = true;
+
+      // 全角英数記号 (U+FF01–FF5E) を半角にマッピングする langmap を設定。
+      // langmap は vimKeyFromEvent 内で照合されるため、IME 経由のケースで機能する。
+      // ,(U+002C) と \(U+005C) は langmap のパース文字なのでスキップ。
+      let langFrom = "", langTo = "";
+      for (let i = 0xFF01; i <= 0xFF5E; i++) {
+        const half = String.fromCharCode(i - 0xFEE0);
+        if (half === "," || half === "\\") continue;
+        langFrom += String.fromCharCode(i);
+        langTo += half;
+      }
+      Vim.langmap(langFrom + ";" + langTo, false);
 
       const copyToClipboard = (text: string) => {
         const el = document.createElement("textarea");

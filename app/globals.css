@@ -1,31 +1,107 @@
 @import "tailwindcss";
 
 :root {
-  --background: #030712;
-  --foreground: #f9fafb;
+  --bg: #05051a;
+  --surface: #080820;
+  --surface2: #0d0d2a;
+  --border: #1a1a44;
+  --border2: #2a2a60;
+  --cyan: #00e5ff;
+  --pink: #ff00aa;
+  --purple: #9d4edd;
+  --text: #c8c8f0;
+  --dim: #50507a;
+  --dim2: #35355a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--bg);
+  color: var(--text);
+  background-image:
+    linear-gradient(rgba(0, 229, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
 }
 
-/* CodeMirror scrollbar styling */
-.cm-scroller::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+.neon-cyan {
+  color: var(--cyan);
+  text-shadow: 0 0 10px var(--cyan), 0 0 22px rgba(0, 229, 255, 0.3);
 }
-.cm-scroller::-webkit-scrollbar-track {
-  background: #1f2937;
+.neon-pink {
+  color: var(--pink);
+  text-shadow: 0 0 10px var(--pink), 0 0 22px rgba(255, 0, 170, 0.3);
 }
-.cm-scroller::-webkit-scrollbar-thumb {
-  background: #4b5563;
-  border-radius: 3px;
+.neon-purple {
+  color: var(--purple);
+  text-shadow: 0 0 10px var(--purple), 0 0 22px rgba(157, 78, 221, 0.3);
 }
+
+.cyber-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+.cyber-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.btn-neon-cyan {
+  background: transparent;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  text-shadow: 0 0 6px rgba(0, 229, 255, 0.7);
+  box-shadow: 0 0 8px rgba(0, 229, 255, 0.2), inset 0 0 8px rgba(0, 229, 255, 0.04);
+  transition: all 0.18s;
+  cursor: pointer;
+}
+.btn-neon-cyan:hover {
+  background: rgba(0, 229, 255, 0.07);
+  box-shadow: 0 0 18px rgba(0, 229, 255, 0.4), inset 0 0 12px rgba(0, 229, 255, 0.07);
+}
+.btn-neon-cyan:active { box-shadow: 0 0 6px rgba(0, 229, 255, 0.3); }
+
+.btn-neon-pink {
+  background: transparent;
+  border: 1px solid var(--pink);
+  color: var(--pink);
+  text-shadow: 0 0 6px rgba(255, 0, 170, 0.7);
+  box-shadow: 0 0 8px rgba(255, 0, 170, 0.2), inset 0 0 8px rgba(255, 0, 170, 0.04);
+  transition: all 0.18s;
+  cursor: pointer;
+}
+.btn-neon-pink:hover {
+  background: rgba(255, 0, 170, 0.07);
+  box-shadow: 0 0 18px rgba(255, 0, 170, 0.4), inset 0 0 12px rgba(255, 0, 170, 0.07);
+}
+.btn-neon-pink:active { box-shadow: 0 0 6px rgba(255, 0, 170, 0.3); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--border2);
+  color: var(--dim);
+  transition: all 0.18s;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  border-color: rgba(0, 229, 255, 0.4);
+  color: var(--cyan);
+  box-shadow: 0 0 6px rgba(0, 229, 255, 0.15);
+}
+
+/* CodeMirror scrollbar */
+.cm-scroller::-webkit-scrollbar { width: 6px; height: 6px; }
+.cm-scroller::-webkit-scrollbar-track { background: var(--surface); }
+.cm-scroller::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
